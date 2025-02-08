@@ -7,12 +7,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import com.castingiq.castingiq.model.JwtUtil;
 
 @Configuration
@@ -45,10 +43,14 @@ public class SecurityConfig {
                 .requestMatchers("/login", "/register").permitAll()  // Allow unauthenticated access to login and register pages
                 .anyRequest().authenticated()  // All other requests require authentication
             .and()
+            // .formLogin()
+            // .loginPage("/login")  // Ensure the login endpoint is correctly configured
+            // .permitAll()
+            // .and()
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // Add JWT filter
-
+          
         return http.build();
-    }
+    }   
 
     // Configure AuthenticationManager
     @Bean

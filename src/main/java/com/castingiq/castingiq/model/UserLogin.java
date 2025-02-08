@@ -15,6 +15,7 @@ public class UserLogin {
     private Long id;
     private String username;
     private String password; // Encrypted password
+
     public UserLogin() {
         super();  // Calls the constructor of the parent class (BaseEntity)
     }

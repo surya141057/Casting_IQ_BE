@@ -1,6 +1,7 @@
 package com.castingiq.castingiq.service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,10 +24,10 @@ public class UserService implements org.springframework.security.core.userdetail
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserLogin user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
+        Optional<UserLogin> userOptional = userRepository.findByUsername(username);
+        
+        // If the user doesn't exist, throw UsernameNotFoundException
+        UserLogin user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return new User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 

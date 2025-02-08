@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
@@ -20,11 +21,16 @@ public class JwtUtil {
 
     // Generate the token for a given username
     public String generateToken(String username) {
+         byte[] keyBytes = secretKey.getBytes();
+        
+        if (keyBytes.length < 32) {  // If secret key is shorter than 256 bits
+            keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded(); // Generate a secure key
+        }
         return Jwts.builder()
             .setSubject(username)
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .signWith(SignatureAlgorithm.HS256, keyBytes    )
             .compact();
     }
 
