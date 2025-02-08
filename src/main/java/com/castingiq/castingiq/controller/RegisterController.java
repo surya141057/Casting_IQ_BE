@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.castingiq.castingiq.model.UserLogin;
+import com.castingiq.castingiq.response.UnauthorizedResponse;
 import com.castingiq.castingiq.service.UserService;
 
 @Controller
@@ -24,6 +25,7 @@ public class RegisterController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserLogin user) {
         userService.registerUser(user);  // Register the user with encrypted password
-        return ResponseEntity.ok().body("User registered successfully");  // After registration, redirect to login
+        return ResponseEntity.ok().body(new UnauthorizedResponse
+("User "+user.getUsername()+ " registered successfully"));  // After registration, redirect to login
     }
 }
