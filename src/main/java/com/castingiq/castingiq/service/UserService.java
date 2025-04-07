@@ -3,6 +3,7 @@ package com.castingiq.castingiq.service;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.castingiq.castingiq.model.UserLogin;
 import com.castingiq.castingiq.repository.UserRepository;
+import com.castingiq.castingiq.service.Exception.UniqueConstraintViolationException;
 
 @Service
 public class UserService implements org.springframework.security.core.userdetails.UserDetailsService {
@@ -33,6 +35,7 @@ public class UserService implements org.springframework.security.core.userdetail
 
     // Method to register a new user with password encryption
     public void registerUser(UserLogin user) {
+        try {
         if (user.getPassword() == null || user.getPassword().isEmpty()) {
             throw new IllegalArgumentException("Password cannot be null");
         }
@@ -43,7 +46,12 @@ public class UserService implements org.springframework.security.core.userdetail
         user.setPassword(encodedPassword);
     
         // Save the user and return
-        userRepository.save(user);
+        userRepository.save(user);}
+        catch (DataIntegrityViolationException e) {
+            // If the database throws a DataIntegrityViolationException, 
+            // throw our custom exception
+            throw new UniqueConstraintViolationException("A user with this username already exists.");
+        }
     }
 }
 
