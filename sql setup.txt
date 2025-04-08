@@ -1,0 +1,59 @@
+Mvn java environment problem:
+
+sudo update-alternatives --config java
+
+echo "export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))" | sudo tee /etc/profile.d/java.sh
+source /etc/profile.d/java.sh
+
+echo $JAVA_HOME
+
+mvn -v
+
+
+
+SQL Command
+
+stop sql :
+sudo systemctl stop mysqld
+
+Start MySQL in safe mode:
+sudo systemctl set-environment MYSQLD_OPTS="--skip-grant-tables --skip-networking"
+
+start sql:
+sudo systemctl start mysqld
+
+Restart MySQL normally:
+sudo pkill mysqld
+sudo systemctl start mysqld
+
+Connect to MySQL without password:
+mysql -u root
+
+Connect to MySQL without password:
+mysql -u root -p
+
+Verify MySQL is running:
+sudo systemctl status mysqld
+
+Check error logs:
+sudo tail -50 /var/log/mysqld.log
+
+Stop sql:
+sudo systemctl stop mysqld
+
+
+Check Default Credentials:
+sudo grep 'temporary password' /var/log/mysqld.log
+
+
+connect without password:
+sudo systemctl stop mysqld
+sudo systemctl set-environment MYSQLD_OPTS="--skip-grant-tables --skip-networking"
+sudo systemctl start mysqld
+mysql -u root
+
+Change password in MySQL:
+FLUSH PRIVILEGES;
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Harini@1415';
+FLUSH PRIVILEGES;
+EXIT;
