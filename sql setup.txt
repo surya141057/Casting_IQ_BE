@@ -1,3 +1,8 @@
+to check the status of the port
+lsof -i :8080
+kill -9 <PID>
+
+
 Temporary Mvn java environment problem:
 
 sudo update-alternatives --config java
